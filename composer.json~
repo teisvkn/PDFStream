@@ -1,0 +1,13 @@
+{
+    "name": "teisvkn/php-pdf-stream",
+    "description": "Extract streams from pdf's to save space, when saving mulitple pdf files with same stream content",
+    "license": "MIT License",
+    "authors": [
+        {
+            "name": "Teis Nielsen",
+            "email": "tvkn@tvkn.dk"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
