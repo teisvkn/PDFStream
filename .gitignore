@@ -1,1 +1,5 @@
+composer.lock
 /vendor/
+.idea/
+tests/pdfstreams/
+tests/data/output/

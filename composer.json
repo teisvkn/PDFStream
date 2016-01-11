@@ -1,6 +1,6 @@
 {
     "name": "teisvkn/php-pdf-stream",
-    "description": "Extract streams from pdf's to save space, when saving mulitple pdf files with same stream content",
+    "description": "Extract streams from pdf-files to external files named by md5 sum of the stream content, saving space, when keeping mulitple pdf files with same stream content",
     "license": "MIT License",
     "authors": [
         {
@@ -11,6 +11,9 @@
     "minimum-stability": "dev",
     "require": {},
     "autoload": {
-            "psr-4": {"TeisVKN\\PhpPdfStream": "src/"}
+            "psr-4": {"TeisVKN\\PhpPdfStream\\": "src/"}
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.3@dev"
     }
 }
