@@ -3,7 +3,13 @@
 class PDFStreamTest extends PHPUnit_Framework_TestCase
 {
 	public function testCanParseStream() {
-		$pdfStream = new TeisVKN\PhpPdfStream\PDFStream(__DIR__.'/pdfstreams');
+		$pdfStreamsDirectory = __DIR__.'/data/output/pdfstreams';
+
+		if (!is_dir($pdfStreamsDirectory )) {
+			mkdir($pdfStreamsDirectory );
+		}
+
+		$pdfStream = new TeisVKN\PhpPdfStream\PDFStream($pdfStreamsDirectory);
 
 		$pdfStream->extractStreams(
 			fopen(__DIR__.'/data/test.pdf', 'r'),
