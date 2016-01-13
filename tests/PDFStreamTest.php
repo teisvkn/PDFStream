@@ -12,7 +12,7 @@ class PDFStreamTest extends PHPUnit_Framework_TestCase
 		$this->pdfStreamsDirectory = __DIR__.'/data/output/pdfstreams';
 
 		if (!is_dir($this->pdfStreamsDirectory )) {
-			mkdir($this->pdfStreamsDirectory );
+			mkdir($this->pdfStreamsDirectory, 0777, true);
 		}
 
 		$this->pdfStream = new TeisVKN\PhpPdfStream\PDFStream($this->pdfStreamsDirectory);;
