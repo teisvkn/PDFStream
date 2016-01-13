@@ -1,5 +1,7 @@
 # PDFStream
 
+[![Build Status](https://travis-ci.org/teisvkn/PDFStream.svg)](https://travis-ci.org/teisvkn/PDFStream)
+
 Extracts stream-blocks from a PDF file into individual files, with their md5 sum as file name, and replaces the stream-block with its md5 sum as a reference, in the PDF.
 And of course it is able to restore the PDF.
 
