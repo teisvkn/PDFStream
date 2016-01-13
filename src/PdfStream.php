@@ -18,20 +18,11 @@ class PDFStream
 	private $pdfStreamDirectory;
 
 	/**
-	 * @var bool
-	 */
-	private $compressStreams;
-	
-	/**
 	 * PdfStream constructor.
 	 * @param $pdfStreamDirectory
-	 * @param bool $compressStreams
-	 * @param bool $compressDstResource
 	 */
-	public function __construct($pdfStreamDirectory, $compressStreams = true, $compressDstResource = true) {
+	public function __construct($pdfStreamDirectory) {
 		$this->pdfStreamDirectory = $pdfStreamDirectory;
-		$this->compressStreams = $compressStreams;
-		$this->compressDstResource = $compressDstResource;
 	}
 
 
@@ -195,16 +186,14 @@ class PDFStream
 		$pdfStreamMd5 = md5(stream_get_contents($this->pdfStreamResource));
 
 		rewind($this->pdfStreamResource);
-		$fileNamePattern = $this->compressStreams ? '%s/%s.gz' : '%s/%s';
-		$pdfStreamFileName = sprintf($fileNamePattern, $this->pdfStreamDirectory, $pdfStreamMd5);
+		$pdfStreamFilePath = sprintf('%s/%s', $this->pdfStreamDirectory, $pdfStreamMd5);
+		$pdfStreamFileResource = fopen($pdfStreamFilePath, 'w');
 
-		$result = file_put_contents(
-			$pdfStreamFileName,
-			$this->compressStreams ? gzencode(stream_get_contents($this->pdfStreamResource), 9) : $this->pdfStreamResource
-		);
-		if ($result === false) {
-			throw new Exception(sprintf('Error occurred when writing pdfStream to %s', $pdfStreamFileName));
+		if ($pdfStreamFileResource === false) {
+			throw new Exception(sprintf('Could not write pdf-stream to file %s', $pdfStreamFilePath));
 		}
+
+		stream_copy_to_stream($this->pdfStreamResource, $pdfStreamFileResource);
 
 		return $pdfStreamMd5;
 	}
@@ -239,20 +228,19 @@ class PDFStream
 
 	/**
 	 * @param $dstResource
+	 * @throws Exception
 	 */
 	private function restorePdfStream($dstResource) {
 		rewind($this->pdfStreamResource);
-		$pdfStreamFileName = trim(stream_get_contents($this->pdfStreamResource));
+		$pdfStreamFilePath = sprintf('%s/%s', $this->pdfStreamDirectory, trim(stream_get_contents($this->pdfStreamResource)));
+		$pdfStreamResource = fopen($pdfStreamFilePath, 'r');
 
-		$fileNamePattern = $this->compressStreams ? '%s/%s.gz' : '%s/%s';
-		$pdfStreamContent = file_get_contents(sprintf($fileNamePattern, $this->pdfStreamDirectory, $pdfStreamFileName));
+		if ($pdfStreamResource === false) {
+			throw new Exception(sprintf('Could not read extracted pdf-stream %s', $pdfStreamFilePath));
+		}
 
-
-		fwrite(
-			$dstResource,
-			$this->compressStreams ? gzdecode($pdfStreamContent) : $pdfStreamContent
-		);
-
+		stream_copy_to_stream($pdfStreamResource, $dstResource);
+		fclose($pdfStreamResource);
 	}
 
 	/**
