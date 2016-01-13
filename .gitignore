@@ -3,3 +3,4 @@ composer.lock
 .idea/
 tests/pdfstreams/
 tests/data/output/
+*~
